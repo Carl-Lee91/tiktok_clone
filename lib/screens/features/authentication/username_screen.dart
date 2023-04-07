@@ -105,8 +105,12 @@ dispose이후 super dispose를 넣는다 */
               ),
               Gaps.v28,
               GestureDetector(
-                  onTap: _onNextTap,
-                  child: FormBtn(disabled: _username.isEmpty))
+                onTap: _onNextTap,
+                child: FormBtn(
+                  disabled: _username.isEmpty,
+                  text: "Next",
+                ),
+              )
             ],
           ),
         ),

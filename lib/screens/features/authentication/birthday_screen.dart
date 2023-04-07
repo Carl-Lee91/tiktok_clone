@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/screens/features/authentication/email_screen.dart';
+import 'package:tiktok_clone/screens/features/onboarding/interests_screen.dart';
 
 import 'widgets/form_btn.dart';
 
@@ -38,7 +38,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   void _onNextTap() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const EmaiilScreen(),
+        builder: (context) => const InterestScreen(),
       ),
     );
   }
@@ -118,7 +118,11 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               ),
               Gaps.v28,
               GestureDetector(
-                  onTap: _onNextTap, child: const FormBtn(disabled: false))
+                  onTap: _onNextTap,
+                  child: const FormBtn(
+                    disabled: false,
+                    text: "Submit",
+                  ))
             ],
           ),
         ),
