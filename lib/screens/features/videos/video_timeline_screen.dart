@@ -29,10 +29,6 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
 
   void _onVideoFinished() {
     return;
-    _pageController.nextPage(
-      duration: _scrollDuration,
-      curve: _scrollCurve,
-    );
   }
 
   @override
@@ -41,18 +37,30 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
     super.dispose();
   } // 메모리 누수를 방지하기 위해 항상 dispose를 잊지말자
 
+  Future<void> _onRefresh() {
+    return Future.delayed(
+      const Duration(seconds: 1),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
-      controller: _pageController,
-      // 페이지 넘기게 해주는 위젯 방향 조절 가능 페이지 생성 가능
-      itemBuilder: (context, index) => VideoPost(
-        onVideoFinished: _onVideoFinished,
-        index: index,
-      ), // VideoPost stful에게 넘겨주는 거임 함수를 ㅇㅇ
-      itemCount: _itemCount,
-      onPageChanged: _onPageChanged,
-      scrollDirection: Axis.vertical,
+    return RefreshIndicator(
+      displacement: 50,
+      edgeOffset: 20,
+      onRefresh: _onRefresh,
+      color: Theme.of(context).primaryColor,
+      child: PageView.builder(
+        controller: _pageController,
+        // 페이지 넘기게 해주는 위젯 방향 조절 가능 페이지 생성 가능
+        itemBuilder: (context, index) => VideoPost(
+          onVideoFinished: _onVideoFinished,
+          index: index,
+        ), // VideoPost stful에게 넘겨주는 거임 함수를 ㅇㅇ
+        itemCount: _itemCount,
+        onPageChanged: _onPageChanged,
+        scrollDirection: Axis.vertical,
+      ),
     );
   }
 }
