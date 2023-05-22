@@ -69,7 +69,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const FaIcon(FontAwesomeIcons.arrowLeftLong),
+                const FaIcon(FontAwesomeIcons.chevronLeft),
                 Gaps.h20,
                 Expanded(
                   child: SizedBox(
