@@ -47,7 +47,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
     Navigator.of(context).pushAndRemoveUntil(
         //push를 사용하지 않는 이유는 다른 창에서 로그인 창으로 돌아가지 않기 하기 위해
         MaterialPageRoute(
-          builder: (context) => const MainNavigation(),
+          builder: (context) => const MainNavigationScreen(),
         ),
         (route) => false);
   }

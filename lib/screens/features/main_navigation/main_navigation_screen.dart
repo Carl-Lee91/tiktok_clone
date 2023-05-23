@@ -8,15 +8,15 @@ import 'package:tiktok_clone/screens/features/main_navigation/widgets/post_video
 import 'package:tiktok_clone/screens/features/videos/inbox/inbox_screen.dart';
 import 'package:tiktok_clone/screens/features/videos/video_timeline_screen.dart';
 
-class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
 
   @override
-  State<MainNavigation> createState() => _MainNavigationState();
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
-class _MainNavigationState extends State<MainNavigation> {
-  int _selectedIndex = 1;
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
+  int _selectedIndex = 3;
   bool _opacity = false;
   double _scale = 1.0;
 
