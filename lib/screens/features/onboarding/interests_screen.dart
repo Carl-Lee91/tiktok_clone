@@ -146,8 +146,7 @@ class _InterestScreenState extends State<InterestScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 2,
+      bottomNavigationBar: Container(
         child: Padding(
           padding: const EdgeInsets.only(
             bottom: Sizes.size40,

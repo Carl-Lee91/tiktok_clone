@@ -30,7 +30,7 @@ class FollowersLikes extends StatelessWidget {
                   fontSize: Sizes.size18,
                 ),
               ),
-              Gaps.v3,
+              Gaps.v2,
               Text(
                 "Following",
                 style: TextStyle(
@@ -55,7 +55,7 @@ class FollowersLikes extends StatelessWidget {
                   fontSize: Sizes.size18,
                 ),
               ),
-              Gaps.v3,
+              Gaps.v2,
               Text(
                 "Followers",
                 style: TextStyle(
@@ -80,7 +80,7 @@ class FollowersLikes extends StatelessWidget {
                   fontSize: Sizes.size18,
                 ),
               ),
-              Gaps.v5,
+              Gaps.v2,
               Text(
                 "Likes",
                 style: TextStyle(

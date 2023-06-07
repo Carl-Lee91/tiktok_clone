@@ -127,9 +127,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.white,
-          elevation: 1,
+        bottomNavigationBar: Container(
           child: SizedBox(
             height: 220,
             child: CupertinoDatePicker(

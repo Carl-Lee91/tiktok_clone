@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/breakpoints.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils.dart';
 
 final tabs = [
   "Top",
@@ -91,7 +92,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             child: FaIcon(
                               FontAwesomeIcons.magnifyingGlass,
                               size: Sizes.size16,
-                              color: Colors.black,
                             ),
                           ),
                           prefixIconConstraints: const BoxConstraints(
@@ -105,7 +105,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             borderSide: BorderSide.none,
                           ),
                           filled: true,
-                          fillColor: Colors.grey.shade200,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: Sizes.size10,
                           ),
@@ -149,9 +148,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 fontWeight: FontWeight.w600,
                 fontSize: Sizes.size16,
               ),
-              unselectedLabelColor: Colors.grey.shade500,
-              labelColor: Colors.black,
-              indicatorColor: Colors.black,
+              indicatorColor: Theme.of(context).tabBarTheme.indicatorColor,
               splashFactory: NoSplash.splashFactory,
               tabs: [
                 for (var tab in tabs)
@@ -199,6 +196,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         style: TextStyle(
                           fontSize: Sizes.size16 + Sizes.size2,
                           fontWeight: FontWeight.bold,
+                          height: 1.1,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -208,7 +206,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           constraints.maxWidth > 250)
                         DefaultTextStyle(
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: isDarkMode(context)
+                                ? Colors.grey.shade300
+                                : Colors.grey.shade600,
                             fontWeight: FontWeight.w600,
                           ),
                           child: Row(

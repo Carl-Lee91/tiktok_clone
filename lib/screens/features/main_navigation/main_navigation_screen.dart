@@ -8,6 +8,7 @@ import 'package:tiktok_clone/screens/features/main_navigation/widgets/post_video
 import 'package:tiktok_clone/screens/features/users/user_profile_screen.dart';
 import 'package:tiktok_clone/screens/features/videos/inbox/inbox_screen.dart';
 import 'package:tiktok_clone/screens/features/videos/video_timeline_screen.dart';
+import 'package:tiktok_clone/utils.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -17,7 +18,7 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 4;
+  int _selectedIndex = 1;
   bool _opacity = false;
   double _scale = 1.0;
 
@@ -65,9 +66,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
+      backgroundColor:
+          _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
       body: Stack(
         children: [
           Offstage(
@@ -89,8 +92,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: _selectedIndex == 0 ? Colors.black : Colors.white,
+      bottomNavigationBar: Container(
+        color: _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(Sizes.size12),
           child: Row(
@@ -119,7 +122,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 onTapCancel: _onPostVideoBtnTapCancel,
                 onTap: _onPostVideoBtnTap,
                 child: AnimatedContainer(
-                  transform: Matrix4.identity()..scale(_scale, _scale, _scale),
                   duration: const Duration(milliseconds: 100),
                   child: AnimatedOpacity(
                     opacity: _opacity ? 1 : 0.5,
