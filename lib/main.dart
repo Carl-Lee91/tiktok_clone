@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
+import 'package:tiktok_clone/screens/features/authentication/email_screen.dart';
+import 'package:tiktok_clone/screens/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/screens/features/authentication/sign_up_screen.dart';
+import 'package:tiktok_clone/screens/features/authentication/username_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -117,7 +120,13 @@ class TikTokApp extends StatelessWidget {
           0xFFE9435A,
         ),
       ),
-      home: const SignUpScreen(),
+      initialRoute: SignUpScreen.routeName,
+      routes: {
+        SignUpScreen.routeName: (context) => const SignUpScreen(),
+        UsernameScreen.routeName: (context) => const UsernameScreen(),
+        LoginScreen.routeName: (context) => const LoginScreen(),
+        EmailScreen.routeName: (context) => const EmailScreen(),
+      },
     );
   }
 }

@@ -4,27 +4,58 @@ import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:tiktok_clone/screens/features/authentication/login_screen.dart';
-import 'package:tiktok_clone/screens/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_clone/screens/features/authentication/username_screen.dart';
+import 'package:tiktok_clone/screens/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
+  static String routeName = "/";
   const SignUpScreen({super.key});
 
-  void _onLoginTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
+  void _onLoginTap(BuildContext context) async {
+    await Navigator.of(context).pushNamed(LoginScreen.routeName);
   }
 
   void _onEmailTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const UsernameScreen(),
+    /* Navigator.of(context).push(
+      PageRouteBuilder(
+        reverseTransitionDuration: const Duration(
+          seconds: 1,
+        ),
+        transitionDuration: const Duration(
+          seconds: 1,
+        ),
+        pageBuilder: (
+          context,
+          animation,
+          secondaryAnimation,
+        ) =>
+            const UsernameScreen(),
+        transitionsBuilder: (
+          context,
+          animation,
+          secondaryAnimation,
+          child,
+        ) {
+          final offsetAnimation = Tween(
+            begin: const Offset(0, -1),
+            end: Offset.zero,
+          ).animate(animation);
+          final opacityAnimation = Tween(
+            begin: 0.5,
+            end: 1.0,
+          ).animate(animation);
+          return SlideTransition(
+            position: offsetAnimation,
+            child: FadeTransition(
+              opacity: opacityAnimation,
+              child: child,
+            ),
+          );
+        },
       ),
-    );
+    ); */
+    Navigator.of(context).pushNamed(UsernameScreen.routeName);
   }
 
   @override

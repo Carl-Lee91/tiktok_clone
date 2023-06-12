@@ -6,6 +6,7 @@ import 'package:tiktok_clone/screens/features/authentication/email_screen.dart';
 import 'widgets/form_btn.dart';
 
 class UsernameScreen extends StatefulWidget {
+  static String routeName = "/username";
   const UsernameScreen({super.key});
 
   @override
@@ -38,9 +39,11 @@ dispose이후 super dispose를 넣는다 */
 
   void _onNextTap() {
     if (_username.isEmpty) return;
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const EmaiilScreen(),
+    Navigator.pushNamed(
+      context,
+      EmailScreen.routeName,
+      arguments: EmailScreenArgs(
+        username: _username,
       ),
     );
   }

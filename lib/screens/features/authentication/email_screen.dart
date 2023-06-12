@@ -5,14 +5,24 @@ import 'package:tiktok_clone/screens/features/authentication/password_screen.dar
 
 import 'widgets/form_btn.dart';
 
-class EmaiilScreen extends StatefulWidget {
-  const EmaiilScreen({super.key});
+class EmailScreenArgs {
+  final String username;
 
-  @override
-  State<EmaiilScreen> createState() => _EmaiilScreenState();
+  EmailScreenArgs({required this.username});
 }
 
-class _EmaiilScreenState extends State<EmaiilScreen> {
+class EmailScreen extends StatefulWidget {
+  static String routeName = "/email";
+
+  const EmailScreen({
+    super.key,
+  });
+
+  @override
+  State<EmailScreen> createState() => _EmailScreenState();
+}
+
+class _EmailScreenState extends State<EmailScreen> {
   final TextEditingController _emailController = TextEditingController();
 
   String _email = "";
@@ -59,6 +69,7 @@ class _EmaiilScreenState extends State<EmaiilScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as EmailScreenArgs;
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
@@ -73,9 +84,9 @@ class _EmaiilScreenState extends State<EmaiilScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gaps.v40,
-              const Text(
-                "What is your email?",
-                style: TextStyle(
+              Text(
+                "What is your email, ${args.username}",
+                style: const TextStyle(
                   fontSize: Sizes.size24,
                   fontWeight: FontWeight.w700,
                 ),
