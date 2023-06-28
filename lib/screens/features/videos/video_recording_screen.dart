@@ -201,14 +201,11 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   void _onPanUpdate(DragUpdateDetails details) {
     double delta = details.localPosition.dy;
 
-    print(delta);
+    double newZoomLevel = _currentZoomLevel + (-delta * 0.01);
+    newZoomLevel = newZoomLevel.clamp(_minZoomLevel, _maxZoomLevel);
 
-    if (delta >= 0) {
-      if (_minZoomLevel > _currentZoomLevel + (-delta * 0.01)) return;
-      _cameraController.setZoomLevel(_currentZoomLevel + (-delta * 0.01));
-    } else {
-      if (_maxZoomLevel < _currentZoomLevel + (-delta * 0.01)) return;
-      _cameraController.setZoomLevel(_currentZoomLevel + (-delta * 0.01));
+    if (_currentZoomLevel != newZoomLevel) {
+      _cameraController.setZoomLevel(newZoomLevel);
     }
   }
 
