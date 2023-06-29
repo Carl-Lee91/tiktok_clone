@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/screens/features/authentication/widgets/form_btn.dart';
@@ -20,12 +21,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        Navigator.of(context).pushAndRemoveUntil(
-            //push를 사용하지 않는 이유는 다른 창에서 로그인 창으로 돌아가지 않기 하기 위해
-            MaterialPageRoute(
-              builder: (context) => const InterestScreen(),
-            ),
-            (route) => false);
+        context.goNamed(InterestScreen.routeName);
       }
     }
   }

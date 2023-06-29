@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/screens/features/onboarding/interests_screen.dart';
@@ -36,12 +37,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _onNextTap() {
-    Navigator.of(context).pushAndRemoveUntil(
-        //push를 사용하지 않는 이유는 다른 창에서 로그인 창으로 돌아가지 않기 하기 위해
-        MaterialPageRoute(
-          builder: (context) => const InterestScreen(),
-        ),
-        (route) => false);
+    context.goNamed(InterestScreen.routeName);
   }
 
   void _onScaffoldTap() {
@@ -69,12 +65,12 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gaps.v20,
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "When is your birthday?",
                         style: TextStyle(
@@ -92,7 +88,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                       ),
                     ],
                   ),
-                  const FaIcon(
+                  FaIcon(
                     FontAwesomeIcons.cakeCandles,
                     size: Sizes.size56,
                     color: Colors.grey,
