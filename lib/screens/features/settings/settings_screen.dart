@@ -47,6 +47,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     subtitle: const Text("Videos will be muted by default."),
                   ),
                 ),
+                ValueListenableBuilder(
+                  valueListenable: darkMode,
+                  builder: (context, value, child) => SwitchListTile.adaptive(
+                    value: value,
+                    onChanged: (value) {
+                      darkMode.value = !darkMode.value;
+                    },
+                    title: const Text("Switch blackmode"),
+                    subtitle: const Text("Screen will be changed blackmode."),
+                  ),
+                ),
                 CheckboxListTile(
                   activeColor: Colors.black,
                   value: _notifications,
