@@ -77,6 +77,8 @@ class _VideoPostState extends State<VideoPost>
       duration: _animationDuration,
     );
 
+    _isMuted = context.read<PlaybackConfigViewModel>().muted;
+
     context
         .read<PlaybackConfigViewModel>()
         .addListener(_onPlaybackConfigChanged);
