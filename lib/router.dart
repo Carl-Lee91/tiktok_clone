@@ -4,9 +4,9 @@ import 'package:tiktok_clone/common/widget/main_navigation/main_navigation_scree
 import 'package:tiktok_clone/screens/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/screens/features/authentication/sign_up_screen.dart';
 import 'package:tiktok_clone/screens/features/onboarding/interests_screen.dart';
-import 'package:tiktok_clone/screens/features/videos/inbox/activity_screen.dart';
-import 'package:tiktok_clone/screens/features/videos/inbox/chat_detail_screen.dart';
-import 'package:tiktok_clone/screens/features/videos/inbox/chats_screens.dart';
+import 'package:tiktok_clone/screens/features/inbox/activity_screen.dart';
+import 'package:tiktok_clone/screens/features/inbox/chat_detail_screen.dart';
+import 'package:tiktok_clone/screens/features/inbox/chats_screens.dart';
 import 'package:tiktok_clone/screens/features/videos/video_recording_screen.dart';
 
 final router = GoRouter(

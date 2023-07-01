@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/screens/features/videos/inbox/chat_detail_screen.dart';
+import 'package:tiktok_clone/screens/features/inbox/chat_detail_screen.dart';
 
 class ChatsScreen extends StatefulWidget {
   static const String routeName = "chats";

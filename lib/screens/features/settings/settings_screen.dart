@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:tiktok_clone/common/widget/main_navigation/widgets/video_configration/video_config.dart';
 import 'package:tiktok_clone/constants/breakpoints.dart';
+import 'package:tiktok_clone/screens/features/videos/view_models/playback_config_vm.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -38,20 +38,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListView(
               children: [
                 SwitchListTile.adaptive(
-                  value: context.watch<VideoConfig>().isMuted,
+                  value: context.watch<PlaybackConfigViewModel>().muted,
                   onChanged: (value) {
-                    context.read<VideoConfig>().toggleIsMuted();
+                    context.read<PlaybackConfigViewModel>().setMuted(value);
                   },
                   title: const Text("Auto Mute"),
                   subtitle: const Text("Videos will be muted by default."),
                 ),
                 SwitchListTile.adaptive(
-                  value: context.watch<VideoConfig>().isDarkmode,
+                  value: context.watch<PlaybackConfigViewModel>().darkmode,
                   onChanged: (value) {
-                    context.read<VideoConfig>().toggleIsDarkmode();
+                    context.read<PlaybackConfigViewModel>().setDarkmode(value);
                   },
-                  title: const Text("Switch blackmode"),
-                  subtitle: const Text("Screen will be changed blackmode."),
+                  title: const Text("Switch theme"),
+                  subtitle:
+                      const Text("Screen will be changed dark/white theme."),
+                ),
+                SwitchListTile.adaptive(
+                  value: context.watch<PlaybackConfigViewModel>().autoplay,
+                  onChanged: (value) {
+                    context.read<PlaybackConfigViewModel>().setAutoplay(value);
+                  },
+                  title: const Text("Autoplay"),
+                  subtitle:
+                      const Text("Videos will start playing automatically.."),
                 ),
                 CheckboxListTile(
                   activeColor: Colors.black,
