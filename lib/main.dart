@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
@@ -26,25 +26,25 @@ void main() async {
   );
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => PlaybackConfigViewModel(repository),
-        ),
+    ProviderScope(
+      overrides: [
+        playbackConfigProvider.overrideWith(
+          () => PlaybackConfigViewModel(repository),
+        )
       ],
       child: const TikTokApp(),
     ),
   );
 }
 
-class TikTokApp extends StatefulWidget {
+class TikTokApp extends ConsumerStatefulWidget {
   const TikTokApp({super.key});
 
   @override
-  State<TikTokApp> createState() => _TikTokAppState();
+  TikTokAppState createState() => TikTokAppState();
 }
 
-class _TikTokAppState extends State<TikTokApp> {
+class TikTokAppState extends ConsumerState<TikTokApp> {
   @override
   Widget build(BuildContext context) {
     S.load(const Locale("ko"));
@@ -62,7 +62,7 @@ class _TikTokAppState extends State<TikTokApp> {
         Locale("en"),
         Locale("ko"),
       ],
-      themeMode: context.watch<PlaybackConfigViewModel>().darkmode
+      themeMode: ref.watch(playbackConfigProvider).darkmode
           ? ThemeMode.dark
           : ThemeMode.light,
       theme: ThemeData(
