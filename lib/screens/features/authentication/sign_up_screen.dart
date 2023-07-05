@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
@@ -6,10 +7,11 @@ import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
 import 'package:tiktok_clone/screens/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/screens/features/authentication/username_screen.dart';
+import 'package:tiktok_clone/screens/features/authentication/view_models/social_auth_view_model.dart';
 import 'package:tiktok_clone/screens/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_clone/utils.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends ConsumerWidget {
   static const routeURL = "/";
   static const routeName = "signUp";
   const SignUpScreen({super.key});
@@ -28,7 +30,7 @@ class SignUpScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return OrientationBuilder(
       builder: (context, orientation) {
         /* if (orientation == Orientation.landscape) {
@@ -77,11 +79,16 @@ class SignUpScreen extends StatelessWidget {
                         text: S.of(context).emailPasswordButton,
                       ),
                     ),
-                    AuthButton(
-                      icon: const FaIcon(
-                        FontAwesomeIcons.facebook,
+                    GestureDetector(
+                      onTap: () => ref
+                          .read(socialAuthProvider.notifier)
+                          .githubSignIn(context),
+                      child: const AuthButton(
+                        icon: FaIcon(
+                          FontAwesomeIcons.github,
+                        ),
+                        text: "Continue with Github",
                       ),
-                      text: S.of(context).facebookButton,
                     ),
                     AuthButton(
                         icon: const FaIcon(
@@ -109,11 +116,16 @@ class SignUpScreen extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          child: AuthButton(
-                            icon: const FaIcon(
-                              FontAwesomeIcons.facebook,
+                          child: GestureDetector(
+                            onTap: () => ref
+                                .read(socialAuthProvider.notifier)
+                                .githubSignIn(context),
+                            child: const AuthButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.github,
+                              ),
+                              text: "Continue with Github",
                             ),
-                            text: S.of(context).facebookButton,
                           ),
                         ),
                         Expanded(
