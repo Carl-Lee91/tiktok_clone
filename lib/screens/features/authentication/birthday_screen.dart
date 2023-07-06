@@ -20,10 +20,6 @@ class _BirthdayScreenState extends ConsumerState<BirthdayScreen> {
 
   DateTime initialDate = DateTime.now();
 
-/*   Code Challenge! DO NOT ENTER CHILD hehe!
-  late DateTime doNotEnterChild =
-      DateTime(initialDate.year - 19, initialDate.month, initialDate.day); */
-
   @override
   void initState() {
     super.initState();
@@ -37,6 +33,11 @@ class _BirthdayScreenState extends ConsumerState<BirthdayScreen> {
   }
 
   void _onNextTap() {
+    final state = ref.read(signUpFrom.notifier).state;
+    ref.read(signUpFrom.notifier).state = {
+      ...state,
+      "birthday": _birthdayController.text,
+    };
     ref.read(signUpProvider.notifier).signUp(context);
   }
 

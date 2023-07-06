@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/screens/features/authentication/email_screen.dart';
+import 'package:tiktok_clone/screens/features/authentication/view_models/signup_view_model.dart';
 
 import 'widgets/form_btn.dart';
 
-class UsernameScreen extends StatefulWidget {
+class UsernameScreen extends ConsumerStatefulWidget {
   const UsernameScreen({super.key});
 
   @override
-  State<UsernameScreen> createState() => _UsernameScreenState();
+  ConsumerState<UsernameScreen> createState() => _UsernameScreenState();
 }
 
-class _UsernameScreenState extends State<UsernameScreen> {
+class _UsernameScreenState extends ConsumerState<UsernameScreen> {
   final TextEditingController _usernameController = TextEditingController();
 
   String _username = "";
@@ -38,6 +40,7 @@ dispose이후 super dispose를 넣는다 */
 
   void _onNextTap() {
     if (_username.isEmpty) return;
+    ref.read(signUpFrom.notifier).state = {"name": _username};
     Navigator.push(
       context,
       MaterialPageRoute(
