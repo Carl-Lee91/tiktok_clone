@@ -7,7 +7,7 @@ import 'package:tiktok_clone/screens/features/users/models/user_profile_model.da
 import 'package:tiktok_clone/screens/features/users/repos/user_repo.dart';
 
 class UserViewModel extends AsyncNotifier<UserProfileModel> {
-  late final UserRepositiry _usersRepository;
+  late final UserRepository _usersRepository;
   late final AuthenticationRepository _authenticationRepository;
 
   @override
@@ -33,6 +33,7 @@ class UserViewModel extends AsyncNotifier<UserProfileModel> {
     }
     state = const AsyncValue.loading();
     final profile = UserProfileModel(
+      hasAvatar: false,
       bio: "undefined",
       link: "undefined",
       uid: credential.user!.uid,
@@ -42,6 +43,12 @@ class UserViewModel extends AsyncNotifier<UserProfileModel> {
     );
     await _usersRepository.createProfile(profile);
     state = AsyncValue.data(profile);
+  }
+
+  Future<void> onAvatarUpload() async {
+    if (state.value != null) return;
+    state = AsyncValue.data(state.value!.copyWith(hasAvatar: true));
+    await _usersRepository.updateUser(state.value!.uid, {"hasAvatar": true});
   }
 }
 
