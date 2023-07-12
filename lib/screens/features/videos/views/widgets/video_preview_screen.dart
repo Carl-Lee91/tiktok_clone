@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:tiktok_clone/screens/features/videos/view_models/timeline_view_model.dart';
+import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/screens/features/videos/view_models/upload_video_view_model.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPreviewScreen extends ConsumerStatefulWidget {
@@ -26,6 +27,9 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   late final VideoPlayerController _videoPlayerController;
 
   bool _savedVideo = false;
+  final TextEditingController _titleEditingController = TextEditingController();
+  final TextEditingController _descriptionEditingController =
+      TextEditingController();
 
   Future<void> _initVideo() async {
     _videoPlayerController = VideoPlayerController.file(
@@ -50,6 +54,8 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   @override
   void dispose() {
     _videoPlayerController.dispose();
+    _titleEditingController.dispose();
+    _descriptionEditingController.dispose();
     super.dispose();
   }
 
@@ -63,7 +69,12 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   }
 
   void _onUploadPressed() {
-    ref.read(timelineProvider.notifier).uploadVideo();
+    ref.read(uploadVideoProvider.notifier).uploadVideo(
+          File(widget.video.path),
+          context,
+          _titleEditingController.text,
+          _descriptionEditingController.text,
+        );
   }
 
   @override
@@ -83,10 +94,10 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
               ),
             ),
           IconButton(
-            onPressed: ref.watch(timelineProvider).isLoading
+            onPressed: ref.watch(uploadVideoProvider).isLoading
                 ? () {}
                 : _onUploadPressed,
-            icon: ref.watch(timelineProvider).isLoading
+            icon: ref.watch(uploadVideoProvider).isLoading
                 ? const CircularProgressIndicator()
                 : const FaIcon(
                     FontAwesomeIcons.cloudArrowUp,
@@ -95,7 +106,46 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
         ],
       ),
       body: _videoPlayerController.value.isInitialized
-          ? VideoPlayer(_videoPlayerController)
+          ? Stack(children: [
+              VideoPlayer(_videoPlayerController),
+              Positioned(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: Sizes.size60,
+                      height: Sizes.size32,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Title',
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        controller: _titleEditingController,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 120,
+                      height: Sizes.size32,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Description',
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        controller: _descriptionEditingController,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ])
           : null,
     );
   }
