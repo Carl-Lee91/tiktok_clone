@@ -7,7 +7,9 @@ import 'package:tiktok_clone/constants/breakpoints.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/generated/l10n.dart';
+import 'package:tiktok_clone/screens/features/videos/models/video_model.dart';
 import 'package:tiktok_clone/screens/features/videos/view_models/playback_config_vm.dart';
+import 'package:tiktok_clone/screens/features/videos/view_models/video_post_view_models.dart';
 import 'package:tiktok_clone/screens/features/videos/views/video_button.dart';
 import 'package:tiktok_clone/screens/features/videos/views/video_comments.dart';
 import 'package:video_player/video_player.dart';
@@ -15,6 +17,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPost extends ConsumerStatefulWidget {
   final Function onVideoFinished; // 넘겨받는거임
+  final VideoModel videoData;
 
   final int index; // 넘겨받는거임
 
@@ -22,6 +25,7 @@ class VideoPost extends ConsumerStatefulWidget {
     super.key,
     required this.onVideoFinished,
     required this.index,
+    required this.videoData,
   });
 
   @override
@@ -38,9 +42,6 @@ class VideoPostState extends ConsumerState<VideoPost>
   bool _isOverflow = false;
   bool _isMuted = true;
 
-  final String _mainText =
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
-
   final Duration _animationDuration = const Duration(milliseconds: 200);
 
   late final AnimationController _animationController;
@@ -52,6 +53,10 @@ class VideoPostState extends ConsumerState<VideoPost>
         widget.onVideoFinished(); // 부모격인 widget에 접근 가능한 메소드
       }
     }
+  }
+
+  void _onLikeTap() {
+    ref.read(videoPostProvider(widget.videoData.id).notifier).likeVideo();
   }
 
   void _initVideoPlayer() async {
@@ -155,7 +160,9 @@ class VideoPostState extends ConsumerState<VideoPost>
   }
 
   String _checkLongText() {
-    return _mainText.length > 25 ? _mainText.substring(0, 25) : _mainText;
+    return widget.videoData.description.length > 25
+        ? widget.videoData.description.substring(0, 25)
+        : widget.videoData.description;
   }
 
   @override
@@ -168,8 +175,9 @@ class VideoPostState extends ConsumerState<VideoPost>
           Positioned.fill(
             child: _videoPlayerController.value.isInitialized
                 ? VideoPlayer(_videoPlayerController)
-                : Container(
-                    color: Colors.black,
+                : Image.network(
+                    widget.videoData.thumbnailUrl,
+                    fit: BoxFit.cover,
                   ),
           ),
           Positioned.fill(
@@ -223,9 +231,9 @@ class VideoPostState extends ConsumerState<VideoPost>
             left: 10,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                "@Carl",
-                style: TextStyle(
+              Text(
+                "@${widget.videoData.creator}",
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: Sizes.size20,
                   fontWeight: FontWeight.bold,
@@ -238,15 +246,18 @@ class VideoPostState extends ConsumerState<VideoPost>
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: _isOverflow ? _mainText : _checkLongText(),
+                        text: _isOverflow
+                            ? widget.videoData.description
+                            : _checkLongText(),
                       ),
                       TextSpan(
-                          text: _isOverflow ? " ...See less" : " ...See more",
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = _onTapOverflow,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ))
+                        text: _isOverflow ? " ...See less" : " ...See more",
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = _onTapOverflow,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                     style: const TextStyle(
                       color: Colors.white,
@@ -272,25 +283,32 @@ class VideoPostState extends ConsumerState<VideoPost>
                   ),
                 ),
                 Gaps.v24,
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   foregroundImage: NetworkImage(
-                      "https://lh3.googleusercontent.com/a/AGNmyxamUvm-3XN71fNXENMkFOcuBM1YTGv4RKiqqEd09g=s288-c-no"),
-                  child: Text("Carl"),
+                      "https://firebasestorage.googleapis.com/v0/b/carltiktok.appspot.com/o/avatars%2F${widget.videoData.creatorUid}?alt=media&haha=${DateTime.now().toString()}"),
+                  child: Text("@${widget.videoData.creator}"),
                 ),
                 Gaps.v24,
-                VideoButton(
-                  icon: FontAwesomeIcons.solidHeart,
-                  text: S.of(context).likeCount(1346534534571),
+                GestureDetector(
+                  onTap: _onLikeTap,
+                  child: VideoButton(
+                    icon: FontAwesomeIcons.solidHeart,
+                    text: S.of(context).likeCount(
+                          widget.videoData.likes,
+                        ),
+                  ),
                 ),
                 Gaps.v24,
                 GestureDetector(
                   onTap: () => _onCommentsTap(context),
                   child: VideoButton(
                     icon: FontAwesomeIcons.solidComment,
-                    text: S.of(context).commentCount(56432345345198),
+                    text: S.of(context).commentCount(
+                          widget.videoData.comments,
+                        ),
                   ),
                 ),
                 Gaps.v24,
