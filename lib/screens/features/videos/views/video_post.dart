@@ -16,10 +16,10 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPost extends ConsumerStatefulWidget {
-  final Function onVideoFinished; // 넘겨받는거임
+  final Function onVideoFinished;
   final VideoModel videoData;
 
-  final int index; // 넘겨받는거임
+  final int index;
 
   const VideoPost({
     super.key,
@@ -34,7 +34,6 @@ class VideoPost extends ConsumerStatefulWidget {
 
 class VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
-  //with는 해당 클래스의 메서드와 속성을 모두 가져오는것
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/LOL.mp4");
 
@@ -50,7 +49,7 @@ class VideoPostState extends ConsumerState<VideoPost>
     if (_videoPlayerController.value.isInitialized) {
       if (_videoPlayerController.value.duration ==
           _videoPlayerController.value.position) {
-        widget.onVideoFinished(); // 부모격인 widget에 접근 가능한 메소드
+        widget.onVideoFinished();
       }
     }
   }
@@ -74,7 +73,6 @@ class VideoPostState extends ConsumerState<VideoPost>
     super.initState();
     _initVideoPlayer();
     _animationController = AnimationController(
-      //애니메이션은 ticker가 필요하다. 하지만 ticker가 항상 활성화 상태면 안되기 때문에 vsync 와 SingleTickerProviderStateMixin로 해당 위젯이 화면에 보일때만 활성화 하는것임(리소스를 잡아먹지 않게 하기 위해)
       vsync: this,
       lowerBound: 1.0,
       upperBound: 1.5,
@@ -187,15 +185,13 @@ class VideoPostState extends ConsumerState<VideoPost>
           ),
           Positioned.fill(
             child: IgnorePointer(
-              // 포인터를 무시하는 위젯
               child: Center(
                 child: AnimatedBuilder(
-                  // 변화값을 인지하고 rebuild해줌(setState와 비슷한 역할)
                   animation: _animationController,
                   builder: (context, child) {
                     return Transform.scale(
                       scale: _animationController.value,
-                      child: child, // 아래 child를 받음
+                      child: child,
                     );
                   },
                   child: AnimatedOpacity(
