@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/screens/features/authentication/repos/authentication_repo.dart';
+import 'package:tiktok_clone/screens/features/inbox/view_models/messages_view_model.dart';
 
-class ChatDetailScreen extends StatefulWidget {
+class ChatDetailScreen extends ConsumerStatefulWidget {
   static const String routeName = "chatDetail";
   static const String routeURL = ":chatId";
 
@@ -15,14 +18,19 @@ class ChatDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<ChatDetailScreen> createState() => _ChatDetailScreenState();
+  ConsumerState<ChatDetailScreen> createState() => ChatDetailScreenState();
 }
 
-class _ChatDetailScreenState extends State<ChatDetailScreen> {
+class ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   bool _isWriting = false;
 
   void _onSubmitWriting() {
+    final text = _textEditingController.text;
+    if (text == "") {
+      return;
+    }
+    ref.read(messagesProvider.notifier).sendMessage(text);
     FocusScope.of(context).unfocus();
     setState(() {
       _isWriting = false;
@@ -44,7 +52,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   }
 
   @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(messagesProvider).isLoading;
     return GestureDetector(
       onTap: _onStopWriting,
       child: Scaffold(
@@ -109,51 +124,68 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         ),
         body: Stack(
           children: [
-            ListView.separated(
-              padding: const EdgeInsets.symmetric(
-                vertical: Sizes.size20,
-                horizontal: Sizes.size14,
-              ),
-              itemBuilder: (context, index) {
-                final inMine = index % 2 == 0;
-                return Row(
-                  mainAxisAlignment:
-                      inMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(
-                        Sizes.size14,
+            ref.watch(chatProvider).when(
+                  data: (data) {
+                    return ListView.separated(
+                      reverse: true,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: Sizes.size96,
+                        horizontal: Sizes.size14,
                       ),
-                      decoration: BoxDecoration(
-                        color: inMine
-                            ? Colors.blue
-                            : Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: const Radius.circular(
-                            Sizes.size20,
-                          ),
-                          topRight: const Radius.circular(
-                            Sizes.size20,
-                          ),
-                          bottomLeft: Radius.circular(
-                              inMine ? Sizes.size20 : Sizes.size5),
-                          bottomRight: Radius.circular(
-                              !inMine ? Sizes.size20 : Sizes.size5),
-                        ),
-                      ),
-                      child: const Text(
-                        "This is a message!",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: Sizes.size16),
-                      ),
+                      itemBuilder: (context, index) {
+                        final message = data[index];
+                        final inMine =
+                            message.userId == ref.watch(authRepo).user!.uid;
+                        return Row(
+                          mainAxisAlignment: inMine
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(
+                                Sizes.size14,
+                              ),
+                              decoration: BoxDecoration(
+                                color: inMine
+                                    ? Colors.blue
+                                    : Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: const Radius.circular(
+                                    Sizes.size20,
+                                  ),
+                                  topRight: const Radius.circular(
+                                    Sizes.size20,
+                                  ),
+                                  bottomLeft: Radius.circular(
+                                      inMine ? Sizes.size20 : Sizes.size5),
+                                  bottomRight: Radius.circular(
+                                      !inMine ? Sizes.size20 : Sizes.size5),
+                                ),
+                              ),
+                              child: Text(
+                                message.text,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Sizes.size16),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                      separatorBuilder: (context, index) => Gaps.v10,
+                      itemCount: data.length,
+                    );
+                  },
+                  error: (error, stackTrace) => Center(
+                    child: Text(
+                      error.toString(),
                     ),
-                  ],
-                );
-              },
-              separatorBuilder: (context, index) => Gaps.v10,
-              itemCount: 10,
-            ),
+                  ),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
             Positioned(
               bottom: 0,
               width: MediaQuery.of(context).size.width,
@@ -220,7 +252,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       ),
                       Gaps.h8,
                       GestureDetector(
-                        onTap: _onSubmitWriting,
+                        onTap: isLoading ? null : _onSubmitWriting,
                         child: Container(
                           width: 35,
                           height: 35,
@@ -228,9 +260,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                             shape: BoxShape.circle,
                             color: Colors.grey.shade400,
                           ),
-                          child: const Center(
+                          child: Center(
                             child: FaIcon(
-                              FontAwesomeIcons.paperPlane,
+                              isLoading
+                                  ? FontAwesomeIcons.hourglass
+                                  : FontAwesomeIcons.paperPlane,
                               color: Colors.white,
                               size: Sizes.size18,
                             ),
